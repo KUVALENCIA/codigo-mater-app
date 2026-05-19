@@ -1,0 +1,15 @@
+{
+    "name": "Código Mater App",
+    "short_name": "CódigoMater",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#e74c3c",
+    "theme_color": "#e74c3c",
+    "icons": [
+      {
+        "src": "data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23e74c3c' /%3E%3Cpath d='M50 15 L50 85 M15 50 L85 50' stroke='%23ffffff' stroke-width='20' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='50' r='15' fill='%23ffffff' /%3E%3Cpath d='M45 55 C45 45, 55 45, 55 55 C55 65, 45 65, 45 55 Z' fill='%23e74c3c' /%3E%3Ccircle cx='50' cy='42' r='4' fill='%23e74c3c' /%3E%3C/svg%3E",
+        "sizes": "192x192",
+        "type": "image/svg+xml"
+      }
+    ]
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código Mater App</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+    <header>
+        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" fill="#e74c3c" />
+            <path d="M50 15 L50 85 M15 50 L85 50" stroke="#ffffff" stroke-width="20" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="15" fill="#ffffff" />
+            <path d="M45 55 C45 45, 55 45, 55 55 C55 65, 45 65, 45 55 Z" fill="#e74c3c" />
+            <circle cx="50" cy="42" r="4" fill="#e74c3c" />
+        </svg>
+        <h1>Código Mater & Triage</h1>
+        <p>Evaluación Obstétrica Rápida</p>
+    </header>
+
+    <main>
+        <form id="triageForm">
+            <section class="card">
+                <h2>1. Signos Vitales</h2>
+                <div class="input-group">
+                    <label>Presión Arterial Sistólica (mmHg):</label>
+                    <input type="number" id="pas" required placeholder="Ej: 120">
+                </div>
+                <div class="input-group">
+                    <label>Presión Arterial Diastólica (mmHg):</label>
+                    <input type="number" id="pad" required placeholder="Ej: 80">
+                </div>
+                <div class="input-group">
+                    <label>Frecuencia Cardíaca (lpm):</label>
+                    <input type="number" id="fc" required placeholder="Ej: 80">
+                </div>
+                <div class="input-group">
+                    <label>Frecuencia Respiratoria (rpm):</label>
+                    <input type="number" id="fr" required placeholder="Ej: 18">
+                </div>
+                <div class="input-group">
+                    <label>Temperatura (°C):</label>
+                    <input type="number" id="temp" step="0.1" required placeholder="Ej: 36.5">
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>2. Evaluación Clínica</h2>
+                <div class="input-group">
+                    <label>Estado de Conciencia:</label>
+                    <select id="conciencia">
+                        <option value="consciente">Consciente</option>
+                        <option value="alterado">Alterado (Somnolienta, Estuporosa)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Hemorragia Transvaginal:</label>
+                    <select id="hemorragia">
+                        <option value="ausente">Ausente / Escasa</option>
+                        <option value="moderada">Moderada</option>
+                        <option value="abundante">Abundante / Visible</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Crisis Convulsivas:</label>
+                    <select id="convulsiones">
+                        <option value="no">No</option>
+                        <option value="si">Sí</option>
+                    </select>
+                </div>
+            </section>
+
+            <button type="button" onclick="evaluarTriage()" class="btn-evaluar">Evaluar Triage</button>
+        </form>
+
+        <div id="resultado" class="hidden card result-card">
+            <h2 id="codigoTitulo">Código</h2>
+            <p id="codigoDesc"></p>
+            <p><strong>Índice de Choque: </strong><span id="choqueValor"></span></p>
+            <button onclick="resetForm()" class="btn-reset">Nueva Evaluación</button>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('SW registrado', reg))
+            .catch(err => console.warn('Error en SW', err));
+        }
+    </script>
+</body>
+</html>
