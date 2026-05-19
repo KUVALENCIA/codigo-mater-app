@@ -1,3 +1,4 @@
+/* --- VARIABLES DE COLOR --- */
 :root {
     --rojo: #e74c3c;
     --amarillo: #f1c40f;
@@ -6,7 +7,11 @@
     --texto: #333;
 }
 
-* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+/* --- ESTILOS GENERALES --- */
+* { 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+}
 
 body {
     margin: 0;
@@ -15,6 +20,7 @@ body {
     color: var(--texto);
 }
 
+/* --- ENCABEZADO --- */
 header {
     background: var(--rojo);
     color: white;
@@ -27,7 +33,12 @@ header {
 h1 { margin: 0; font-size: 24px; }
 p { margin: 5px 0 0; font-size: 14px; opacity: 0.9; }
 
-main { padding: 20px; max-width: 600px; margin: 0 auto; }
+/* --- CONTENEDOR PRINCIPAL --- */
+main { 
+    padding: 20px; 
+    max-width: 600px; 
+    margin: 0 auto; 
+}
 
 .card {
     background: white;
@@ -37,26 +48,113 @@ main { padding: 20px; max-width: 600px; margin: 0 auto; }
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 18px; color: #555; }
+h2 { 
+    border-bottom: 2px solid #eee; 
+    padding-bottom: 10px; 
+    margin-top: 0; 
+    font-size: 18px; 
+    color: #555; 
+}
 
+/* --- FORMULARIOS E INPUTS --- */
 .input-group { margin-bottom: 15px; }
-.input-group label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+.input-group label { 
+    display: block; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+    font-size: 14px; 
+}
 .input-group input, .input-group select {
-    width: 100%; padding: 10px; border: 1px solid #ccc;
-    border-radius: 5px; font-size: 16px; outline: none;
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    font-size: 16px; 
+    outline: none;
 }
-.input-group input:focus, .input-group select:focus { border-color: var(--rojo); }
+.input-group input:focus, .input-group select:focus { 
+    border-color: var(--rojo); 
+}
 
+/* --- BOTONES --- */
 .btn-evaluar, .btn-reset {
-    width: 100%; padding: 15px; border: none; border-radius: 5px;
-    font-size: 18px; font-weight: bold; cursor: pointer; color: white;
+    width: 100%; 
+    padding: 15px; 
+    border: none; 
+    border-radius: 5px;
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    color: white;
 }
-.btn-evaluar { background-color: var(--rojo); margin-bottom: 20px;}
+.btn-evaluar { background-color: var(--rojo); margin-bottom: 20px; }
 .btn-reset { background-color: #7f8c8d; margin-top: 15px; }
 
+/* --- UTILIDADES --- */
 .hidden { display: none; }
 
+/* --- RESULTADOS TRIAGE --- */
 .result-card { text-align: center; border: 4px solid transparent; }
 .bg-rojo { background-color: #ffeaea; border-color: var(--rojo); color: #900; }
 .bg-amarillo { background-color: #fff9e6; border-color: var(--amarillo); color: #8a6d00; }
 .bg-verde { background-color: #eafaf1; border-color: var(--verde); color: #006b29; }
+
+
+/* =========================================
+   NUEVO: ESTILOS DEL MÓDULO ERIO
+   ========================================= */
+
+.erio-header {
+    background-color: #c0392b; /* Rojo fuerte para alertas */
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(192, 57, 43, 0.4);
+}
+
+.timer {
+    font-size: 54px;
+    font-weight: bold;
+    font-family: monospace;
+    margin: 10px 0;
+    letter-spacing: 2px;
+}
+
+.warning-text {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+.roles-checklist {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.roles-checklist h3, .registro-acciones h3 {
+    font-size: 16px;
+    color: var(--rojo);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.roles-checklist label {
+    display: block;
+    padding: 10px 5px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.registro-acciones { margin-top: 25px; }
+
+.registro-acciones textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    resize: vertical;
+}

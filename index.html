@@ -83,6 +83,32 @@
             <p><strong>Índice de Choque: </strong><span id="choqueValor"></span></p>
             <button onclick="resetForm()" class="btn-reset">Nueva Evaluación</button>
         </div>
+
+        <div id="erioPanel" class="hidden card">
+            <div class="erio-header">
+                <h2>Alerta Código Mater / ERIO</h2>
+                <div class="timer" id="erioTimer">00:00</div>
+                <p class="warning-text">Llegada del equipo exigida: < 3 minutos</p>
+            </div>
+            
+            <div class="roles-checklist">
+                <h3>Checklist de Llegada ERIO</h3>
+                <label><input type="checkbox"> Líder (Evalúa / Dirige Reanimación)</label>
+                <label><input type="checkbox"> Brazo Izquierdo (Signos vitales / Vía Aérea)</label>
+                <label><input type="checkbox"> Brazo Derecho (Accesos venosos / Labs)</label>
+                <label><input type="checkbox"> Enf. Circulante (Prepara medicamentos)</label>
+                <label><input type="checkbox"> Médico/a Gineco-Obstetra (Rastreo / Manejo)</label>
+                <label><input type="checkbox"> Médico/a Neonatólogo (Prepara reanimación)</label>
+            </div>
+
+            <div class="registro-acciones">
+                <h3>Registro Rápido de Manejo (Anexo 7)</h3>
+                <textarea placeholder="Anota soluciones, medicamentos, hemoderivados..." rows="4"></textarea>
+            </div>
+
+            <button type="button" onclick="detenerERIO()" class="btn-reset">Finalizar Atención ERIO</button>
+        </div>
+
     </main>
 
     <script src="app.js"></script>
@@ -90,8 +116,8 @@
         // Registrar Service Worker para PWA
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('SW registrado', reg))
-            .catch(err => console.warn('Error en SW', err));
+            .then(reg => console.log('SW registrado exitosamente', reg))
+            .catch(err => console.warn('Error al registrar SW', err));
         }
     </script>
 </body>

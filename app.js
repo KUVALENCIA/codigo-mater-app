@@ -1,5 +1,8 @@
+// --- VARIABLES GLOBALES DEL CRONÓMETRO ---
+let erioInterval;
+let secondsElapsed = 0;
+
 function evaluarTriage() {
-    // Obtener valores del formulario
     const pas = parseFloat(document.getElementById('pas').value);
     const pad = parseFloat(document.getElementById('pad').value);
     const fc = parseFloat(document.getElementById('fc').value);
@@ -10,19 +13,16 @@ function evaluarTriage() {
     const hemorragia = document.getElementById('hemorragia').value;
     const convulsiones = document.getElementById('convulsiones').value;
 
-    // Validación básica
     if (isNaN(pas) || isNaN(pad) || isNaN(fc) || isNaN(fr) || isNaN(temp)) {
         alert("Por favor, llene todos los signos vitales.");
         return;
     }
 
-    // Cálculo Índice de Choque (FC / PAS)
     const indiceChoque = (fc / pas).toFixed(2);
     document.getElementById('choqueValor').innerText = indiceChoque;
 
-    let nivel = 'VERDE'; // Por defecto es verde
+    let nivel = 'VERDE';
 
-    // Evaluación CÓDIGO AMARILLO (Urgencia calificada)
     if (
         (pas >= 140 && pas <= 159) || (pad >= 90 && pad <= 109) ||
         (pas >= 90 && pas <= 99) || (pad >= 51 && pad <= 59) ||
@@ -34,7 +34,6 @@ function evaluarTriage() {
         nivel = 'AMARILLO';
     }
 
-    // Evaluación CÓDIGO ROJO (Emergencia) - Sobrescribe al amarillo si se cumple
     if (
         pas >= 160 || pad >= 110 || pas <= 89 || pad <= 50 ||
         fc < 45 || fc > 125 ||
@@ -57,7 +56,6 @@ function mostrarResultado(nivel) {
     const desc = document.getElementById('codigoDesc');
     const form = document.getElementById('triageForm');
 
-    // Quitar clases previas
     contenedor.className = 'card result-card';
     form.classList.add('hidden');
     contenedor.classList.remove('hidden');
@@ -65,7 +63,11 @@ function mostrarResultado(nivel) {
     if (nivel === 'ROJO') {
         contenedor.classList.add('bg-rojo');
         titulo.innerText = "CÓDIGO ROJO: EMERGENCIA";
-        desc.innerText = "¡ACTIVAR CÓDIGO MATER / ERIO INMEDIATAMENTE! Atención vital en área de choque.";
+        // Añadimos el botón especial de activación ERIO
+        desc.innerHTML = `¡ACTIVAR CÓDIGO MATER INMEDIATAMENTE!<br><br>
+                          <button onclick="activarERIO()" class="btn-evaluar" style="background-color: darkred; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                            🚨 ACTIVAR PROTOCOLO ERIO
+                          </button>`;
     } else if (nivel === 'AMARILLO') {
         contenedor.classList.add('bg-amarillo');
         titulo.innerText = "CÓDIGO AMARILLO: URGENCIA CALIFICADA";
@@ -75,6 +77,50 @@ function mostrarResultado(nivel) {
         titulo.innerText = "CÓDIGO VERDE: URGENCIA NO CALIFICADA";
         desc.innerText = "Paciente en sala de espera. Atención en un periodo máximo de 30 minutos.";
     }
+}
+
+// --- NUEVAS FUNCIONES AVANZADAS ERIO ---
+
+function activarERIO() {
+    document.getElementById('resultado').classList.add('hidden');
+    document.getElementById('erioPanel').classList.remove('hidden');
+    
+    // Iniciar cronómetro
+    secondsElapsed = 0;
+    document.getElementById('erioTimer').innerText = "00:00";
+    document.getElementById('erioTimer').style.color = "white"; // Resetear color
+    
+    // Ejecutar función cada 1000 milisegundos (1 segundo)
+    erioInterval = setInterval(actualizarReloj, 1000);
+}
+
+function actualizarReloj() {
+    secondsElapsed++;
+    
+    // Lógica para formatear minutos y segundos con ceros a la izquierda
+    let minutos = Math.floor(secondsElapsed / 60);
+    let segundos = secondsElapsed % 60;
+    let tiempoTexto = (minutos < 10 ? "0" + minutos : minutos) + ":" + (segundos < 10 ? "0" + segundos : segundos);
+    
+    document.getElementById('erioTimer').innerText = tiempoTexto;
+    
+    // El documento indica que el ERIO debe llegar en menos de 3 minutos (180 segundos).
+    if (secondsElapsed >= 180) {
+        document.getElementById('erioTimer').style.color = "#ffbaba"; // Color de advertencia sutil
+    }
+}
+
+function detenerERIO() {
+    clearInterval(erioInterval); // Detiene el reloj
+    alert("Atención estabilizada. Tiempo de registro: " + document.getElementById('erioTimer').innerText);
+    
+    // Limpiamos los checks y el área de texto para el próximo paciente
+    const checkboxes = document.querySelectorAll('.roles-checklist input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = false);
+    document.querySelector('.registro-acciones textarea').value = "";
+    
+    document.getElementById('erioPanel').classList.add('hidden');
+    resetForm();
 }
 
 function resetForm() {
