@@ -2,32 +2,36 @@
 let erioInterval;
 let secondsElapsed = 0;
 
+/**
+ * 1. Función principal de evaluación de Triage Obstétrico
+ */
 function evaluarTriage() {
-    // 1. Obtener valores de los inputs
+    // Obtener valores numéricos de los campos de signos vitales
     const pas = parseFloat(document.getElementById('pas').value);
     const pad = parseFloat(document.getElementById('pad').value);
     const fc = parseFloat(document.getElementById('fc').value);
     const fr = parseFloat(document.getElementById('fr').value);
     const temp = parseFloat(document.getElementById('temp').value);
     
+    // Obtener valores de evaluación clínica (selects)
     const conciencia = document.getElementById('conciencia').value;
     const hemorragia = document.getElementById('hemorragia').value;
     const convulsiones = document.getElementById('convulsiones').value;
 
-    // 2. Validación de seguridad para que no haya campos vacíos
+    // Validación de seguridad para asegurar que no falten datos obligatorios
     if (isNaN(pas) || isNaN(pad) || isNaN(fc) || isNaN(fr) || isNaN(temp)) {
         alert("Por favor, llena todos los signos vitales con números antes de evaluar.");
         return;
     }
 
-    // 3. Calcular Índice de Choque
+    // Calcular Índice de Choque (Frecuencia Cardíaca / Presión Arterial Sistólica)
     const indiceChoque = (fc / pas).toFixed(2);
     document.getElementById('choqueValor').innerText = indiceChoque;
 
-    // 4. Lógica de Triage
-    let nivel = 'VERDE'; // Por defecto
+    // Definición del nivel base (Verde por defecto)
+    let nivel = 'VERDE';
 
-    // Reglas para Código Amarillo
+    // Reglas para clasificar en Código Amarillo (Urgencia Calificada)
     if (
         (pas >= 140 && pas <= 159) || (pad >= 90 && pad <= 109) ||
         (pas >= 90 && pas <= 99) || (pad >= 51 && pad <= 59) ||
@@ -39,7 +43,7 @@ function evaluarTriage() {
         nivel = 'AMARILLO';
     }
 
-    // Reglas para Código Rojo (Sobrescribe al amarillo)
+    // Reglas prioritarias para Código Rojo (Emergencia - Sobrescribe al Amarillo)
     if (
         pas >= 160 || pad >= 110 || pas <= 89 || pad <= 50 ||
         fc < 45 || fc > 125 ||
@@ -53,28 +57,34 @@ function evaluarTriage() {
         nivel = 'ROJO';
     }
 
+    // Enviar el diagnóstico a la interfaz gráfica
     mostrarResultado(nivel);
 }
 
+/**
+ * 2. NUEVA FUNCIÓN: Mostrar resultados de forma segura en Android, iOS y Windows
+ */
 function mostrarResultado(nivel) {
     const contenedor = document.getElementById('resultado');
     const titulo = document.getElementById('codigoTitulo');
     const desc = document.getElementById('codigoDesc');
     const form = document.getElementById('triageForm');
+    const btnErio = document.getElementById('btnErio'); // Botón físico del HTML
 
-    // Resetear las vistas
+    // Configuración base de visualización (ocultar formulario y mostrar contenedor)
     contenedor.className = 'card result-card';
     form.classList.add('hidden');
     contenedor.classList.remove('hidden');
+    
+    // Ocultar siempre el botón ERIO por defecto al iniciar una nueva evaluación
+    btnErio.classList.add('hidden'); 
 
+    // Aplicar estilos y textos según la gravedad del código determinado
     if (nivel === 'ROJO') {
         contenedor.classList.add('bg-rojo');
         titulo.innerText = "CÓDIGO ROJO: EMERGENCIA";
-        // Aquí insertamos el botón ERIO
-        desc.innerHTML = `¡ACTIVAR CÓDIGO MATER INMEDIATAMENTE!<br><br>
-                          <button type="button" onclick="activarERIO()" class="btn-evaluar" style="background-color: darkred; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
-                            🚨 ACTIVAR PROTOCOLO ERIO
-                          </button>`;
+        desc.innerText = "¡ACTIVAR CÓDIGO MATER INMEDIATAMENTE!";
+        btnErio.classList.remove('hidden'); // Mostrar de forma segura el botón en móviles
     } else if (nivel === 'AMARILLO') {
         contenedor.classList.add('bg-amarillo');
         titulo.innerText = "CÓDIGO AMARILLO: URGENCIA CALIFICADA";
@@ -86,70 +96,78 @@ function mostrarResultado(nivel) {
     }
 }
 
-// ==========================================
-//    MÓDULO AVANZADO ERIO (CRONÓMETRO)
-// ==========================================
-
+/**
+ * 3. Módulo de Activación de Protocolo de Emergencia ERIO
+ */
 function activarERIO() {
-    // 1. Ocultar resultado anterior y mostrar panel ERIO
+    // Ocultar la pantalla de resultados y abrir el panel con el cronómetro de reanimación
     document.getElementById('resultado').classList.add('hidden');
     document.getElementById('erioPanel').classList.remove('hidden');
     
-    // 2. Preparar el reloj
+    // Inicializar el reloj a ceros
     secondsElapsed = 0;
     const timerDisplay = document.getElementById('erioTimer');
     timerDisplay.innerText = "00:00";
     timerDisplay.style.color = "white"; 
     
-    // 3. Limpiar cualquier intervalo fantasma previo y arrancar de nuevo
+    // Evitar acumulaciones de intervalos previos y encender el cronómetro por segundo
     if (erioInterval) clearInterval(erioInterval);
     erioInterval = setInterval(actualizarReloj, 1000);
 }
 
+/**
+ * 4. Actualización del reloj en tiempo real
+ */
 function actualizarReloj() {
     secondsElapsed++;
     
     let minutos = Math.floor(secondsElapsed / 60);
     let segundos = secondsElapsed % 60;
     
-    // Poner un '0' a la izquierda si es menor de 10 (ej: 05 en vez de 5)
+    // Formatear cadenas de texto para colocar un cero si son menores a 10 (ej: 02:05)
     let textoMinutos = minutos < 10 ? "0" + minutos : minutos;
     let textoSegundos = segundos < 10 ? "0" + segundos : segundos;
     
     const timerDisplay = document.getElementById('erioTimer');
     timerDisplay.innerText = `${textoMinutos}:${textoSegundos}`;
     
-    // Si pasan 3 minutos (180 segundos), cambiar color a alerta
+    // El lineamiento exige llegada en < 3 min (180s). Si se excede, el reloj cambia de color de alerta
     if (secondsElapsed >= 180) {
         timerDisplay.style.color = "#ffbaba"; 
     }
 }
 
+/**
+ * 5. Cierre y finalización del protocolo de atención médica
+ */
 function detenerERIO() {
-    // 1. Detener el reloj
+    // Detener el intervalo de tiempo
     clearInterval(erioInterval);
     
-    // 2. Mostrar alerta de finalización
+    // Notificar al médico el tiempo transcurrido para la toma de notas en el expediente
     const tiempoFinal = document.getElementById('erioTimer').innerText;
     alert("✅ Atención estabilizada.\nTiempo total de reanimación: " + tiempoFinal);
     
-    // 3. Limpiar checkboxes de roles
+    // Desmarcar automáticamente todas las casillas del checklist del personal
     const checkboxes = document.querySelectorAll('.roles-checklist input[type="checkbox"]');
     checkboxes.forEach(cb => cb.checked = false);
     
-    // 4. Limpiar caja de texto
+    // Limpiar el campo de texto del registro rápido de maniobras
     const textarea = document.querySelector('.registro-acciones textarea');
     if (textarea) textarea.value = "";
     
-    // 5. Ocultar el panel y resetear todo
+    // Ocultar el panel de alerta y restablecer la app
     document.getElementById('erioPanel').classList.add('hidden');
     resetForm();
 }
 
+/**
+ * 6. Limpieza integral de los formularios
+ */
 function resetForm() {
     document.getElementById('triageForm').reset();
     document.getElementById('resultado').classList.add('hidden');
-    document.getElementById('erioPanel').classList.add('hidden'); // Ocultar por seguridad
+    document.getElementById('erioPanel').classList.add('hidden'); 
     document.getElementById('triageForm').classList.remove('hidden');
     document.getElementById('choqueValor').innerText = "";
 }

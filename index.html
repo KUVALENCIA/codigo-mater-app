@@ -23,7 +23,7 @@
     </header>
 
     <main>
-        <form id="triageForm">
+        <form id="triageForm" onsubmit="event.preventDefault();">
             <section class="card">
                 <h2>1. Signos Vitales</h2>
                 <div class="input-group">
@@ -81,14 +81,19 @@
             <h2 id="codigoTitulo">Código</h2>
             <p id="codigoDesc"></p>
             <p><strong>Índice de Choque: </strong><span id="choqueValor"></span></p>
-            <button onclick="resetForm()" class="btn-reset">Nueva Evaluación</button>
+            
+            <button id="btnErio" type="button" onclick="activarERIO()" class="btn-evaluar hidden" style="background-color: darkred; box-shadow: 0 4px 8px rgba(0,0,0,0.3); margin-top: 15px;">
+                🚨 ACTIVAR PROTOCOLO ERIO
+            </button>
+
+            <button type="button" onclick="resetForm()" class="btn-reset">Nueva Evaluación</button>
         </div>
 
         <div id="erioPanel" class="hidden card">
             <div class="erio-header">
                 <h2>Alerta Código Mater / ERIO</h2>
                 <div class="timer" id="erioTimer">00:00</div>
-                <p class="warning-text">Llegada del equipo exigida: < 3 minutos</p>
+                <p class="warning-text">Llegada del equipo exigida: &lt; 3 minutos</p>
             </div>
             
             <div class="roles-checklist">
